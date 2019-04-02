@@ -13,10 +13,10 @@ import java.util.ArrayList;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
 
-    int id=0;
+
     ArrayList<String> mStrings;
-    public Adapter() {
-//        mStrings = Chapter.s;
+    public Adapter(ArrayList<String> s) {
+         mStrings = s;
     }
 
     @Override
@@ -26,7 +26,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        String chapter = mStrings.get(position);
+        holder.chapterBtn.setText(chapter);
+        holder.chapterBtn.setAllCaps(false);
         holder.chapterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,7 +41,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mStrings == null ? 0 :mStrings.size();
     }
 
 public class ViewHolder extends RecyclerView.ViewHolder {

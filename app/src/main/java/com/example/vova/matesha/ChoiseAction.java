@@ -42,7 +42,7 @@ public class ChoiseAction extends AppCompatActivity {
                         showPopupMenu(v);
                         return;
                     default:
-                        Log.e("WTF", "WTF");
+
                 }
 
             }
