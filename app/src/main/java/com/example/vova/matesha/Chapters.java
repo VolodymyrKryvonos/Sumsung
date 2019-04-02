@@ -2,6 +2,7 @@ package com.example.vova.matesha;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,11 +14,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class Chapters extends Fragment {
+
+    static Chapters newInstance(int page) {
+        Chapters pageFragment = new Chapters();
+        return pageFragment;
+    }
 
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
@@ -28,7 +35,11 @@ public class Chapters extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.algebra_chapters_fragment,container,false);
-        fillChapters();
+        try {
+            fillChapters();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         recyclerView = view.findViewById(R.id.algebra_list);
         adapter = new Adapter(chapters);
@@ -38,17 +49,31 @@ public class Chapters extends Fragment {
         return view;
     }
 
-    private void fillChapters() {
-        String sub = "";
+    private void fillChapters() throws IOException {
+        String sub = "1";
         Intent intent = getActivity().getIntent();
         int from = intent.getExtras().getInt(ChoiseAction.SUB_KEY);
         if (from == 0){
-            sub = "algebra";
+            sub = "1";
         }
-        else sub = "geometry";
+        else sub = "2";
+
         helper = new DBHelper(getContext());
+        try {
+            helper.createDataBase();
+        } catch (IOException ioe) {
+            throw new Error("Unable to create database");
+        }
+
+        try {
+            helper.openDataBase();
+        }catch(SQLException sqle){
+            throw sqle;
+        }
+
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor query = db.rawQuery("SELECT chapter FROM chapters WHERE subject=? ;", new String[]{sub});
+
+        Cursor query = db.rawQuery("SELECT chapter FROM chapters WHERE subject=1 ;", new String[]{sub});
         if (query.moveToFirst()){
             do {
                 chapters.add(query.getString(1));
