@@ -59,30 +59,17 @@ public class Chapters extends Fragment {
         else sub = "2";
 
         helper = new DBHelper(getContext());
-        try {
-            helper.createDataBase();
-        } catch (IOException ioe) {
-            throw new Error("Unable to create database");
-        }
-
-        try {
-            helper.openDataBase();
-        }catch(SQLException sqle){
-            throw sqle;
-        }
 
         SQLiteDatabase db = helper.getReadableDatabase();
-
-        Cursor query = db.rawQuery("SELECT chapter FROM chapters WHERE subject=1 ;", new String[]{sub});
+        Cursor query = db.rawQuery("SELECT chapter FROM chapters WHERE subject=? ;",new String[]{sub});
         if (query.moveToFirst()){
             do {
-                chapters.add(query.getString(1));
+                chapters.add(query.getString(0));
             }
             while (query.moveToNext());
 
         }
         query.close();
-        db.close();
 
     }
 }
