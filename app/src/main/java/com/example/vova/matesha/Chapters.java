@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class Chapters extends Fragment {
+public class Chapters extends Fragment implements Adapter.onBtnClickListener {
 
     static Chapters newInstance(int page) {
         Chapters pageFragment = new Chapters();
@@ -42,7 +42,7 @@ public class Chapters extends Fragment {
         }
 
         recyclerView = view.findViewById(R.id.algebra_list);
-        adapter = new Adapter(chapters);
+        adapter = new Adapter(chapters,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
@@ -70,6 +70,11 @@ public class Chapters extends Fragment {
 
         }
         query.close();
+
+    }
+
+    @Override
+    public void onBtnClickListener(int position ,String name) {
 
     }
 }
