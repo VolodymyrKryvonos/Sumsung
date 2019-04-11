@@ -10,7 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 public class ChoseChapter extends AppCompatActivity {
-    Intent intent = getIntent();
     ViewPager pager;
     PagerAdapter pagerAdapter;
 

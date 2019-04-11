@@ -14,10 +14,10 @@ import java.util.ArrayList;
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
 
-    ArrayList<String> mStrings;
+    ArrayList<Chapter> mChapters;
     onBtnClickListener listener;
-    public Adapter(ArrayList<String> s, onBtnClickListener listener) {
-        mStrings = s;
+    public Adapter(ArrayList<Chapter> s, onBtnClickListener listener) {
+        mChapters = s;
         this.listener = listener;
     }
 
@@ -29,7 +29,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        String chapter = mStrings.get(position);
+        String chapter = mChapters.get(position).name;
         holder.chapterBtn.setText(chapter);
         holder.chapterBtn.setAllCaps(false);
         final int finalPosition = position;
@@ -37,7 +37,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 if(listener!=null){
-                    listener.onBtnClickListener(finalPosition, holder.chapterBtn.getText().toString());
+                    listener.onBtnClickListener(mChapters.get(finalPosition).id);
                 }
             }
         });
@@ -45,7 +45,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mStrings == null ? 0 : mStrings.size();
+        return mChapters == null ? 0 : mChapters.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -58,7 +58,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     public interface onBtnClickListener{
-        void onBtnClickListener(int position,String name);
+        void onBtnClickListener(int id);
     }
 
 }

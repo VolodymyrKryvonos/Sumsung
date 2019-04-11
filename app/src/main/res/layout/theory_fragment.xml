@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gb">
+
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:visibility="gone"
+        />
+
+    <ImageButton
+        android:id="@+id/hide_img"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/img"
+        android:visibility="gone"
+        android:src="@drawable/arrow_up_float" />
+
+    <ScrollView
+        android:layout_below="@+id/hide_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp">
+        <io.github.kexanie.library.MathView
+            android:id="@+id/theory_there"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:text="$$x=\frac{1+y}{1+2z^2}$$"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="20dp" />
+    </ScrollView>
+
+</RelativeLayout>

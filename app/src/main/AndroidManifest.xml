@@ -20,6 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ChoseChapter"></activity>
+        <activity android:name=".HolderActivity"></activity>
+        <activity android:name=".FlipCardActivity"></activity>
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener {
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     DBHelper helper;
-    ArrayList<String> chapters = new ArrayList<>();
+    ArrayList<Chapter> chapters = new ArrayList<>();
 
     @Nullable
     @Override
@@ -61,20 +62,22 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener {
         helper = new DBHelper(getContext());
 
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor query = db.rawQuery("SELECT chapter FROM chapters WHERE subject=? ;",new String[]{sub});
+        Cursor query = db.rawQuery("SELECT chapter, _id FROM chapters WHERE subject=? ;",new String[]{sub});
         if (query.moveToFirst()){
             do {
-                chapters.add(query.getString(0));
+                chapters.add(new Chapter(query.getString(0),query.getInt(1)));
             }
             while (query.moveToNext());
 
         }
         query.close();
-
+        db.close();
     }
 
     @Override
-    public void onBtnClickListener(int position ,String name) {
-
+    public void onBtnClickListener(int id) {
+            Intent intent = new Intent(getActivity(),HolderActivity.class);
+            intent.putExtra("ID",id);
+            startActivity(intent);
     }
 }
