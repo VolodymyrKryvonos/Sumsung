@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
     package="com.example.vova.matesha">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".TaskActivity"></activity>
         <activity android:name=".ChoiseAction">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,9 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChoseChapter"></activity>
-        <activity android:name=".HolderActivity"></activity>
-        <activity android:name=".FlipCardActivity"></activity>
+        <activity android:name=".ChoseChapter" />
+        <activity android:name=".HolderActivity" />
+        <activity android:name=".FlipCardActivity" />
     </application>
 
 </manifest>

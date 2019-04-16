@@ -28,48 +28,47 @@ public class TheoryFragment extends Fragment {
     ImageButton button;
     boolean visibl = false;
     private RequestOptions glideRequestOptions;
+
     @SuppressLint("WrongConstant")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.theory_fragment,container,false);
+        View v = inflater.inflate(R.layout.theory_fragment, container, false);
         textView = v.findViewById(R.id.theory_there);
         imageView = v.findViewById(R.id.img);
         button = v.findViewById(R.id.hide_img);
         Intent intent = getActivity().getIntent();
         DBHelper helper = new DBHelper(getContext());
         SQLiteDatabase database = helper.getReadableDatabase();
-        Cursor cursor = database.rawQuery("SELECT theory, IMG_URL FROM chapters WHERE _id=?",new String[]{intent.getExtras().getInt("ID")+""});
+        Cursor cursor = database.rawQuery("SELECT theory, IMG_URL FROM chapters WHERE _id=?", new String[]{intent.getExtras().getInt("ID") + ""});
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(visibl){
+                if (visibl) {
                     imageView.setVisibility(View.GONE);
                     button.setImageResource(R.drawable.arrow_down_float);
                     visibl = !visibl;
-                }
-                else{
+                } else {
                     imageView.setVisibility(View.VISIBLE);
                     button.setImageResource(R.drawable.arrow_up_float);
                     visibl = !visibl;
                 }
             }
         });
-        if(cursor.moveToFirst()&&(cursor.getString(0)!=null)){
-            textView.setText("<p>"+"<font size=5>"+cursor.getString(0)+"</font>"+"</p>");
-            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        if (cursor.moveToFirst() && (cursor.getString(0) != null)) {
+            textView.setText("<font size=5>" + cursor.getString(0) + "</font>" + "<br>");
+
 
         }
-        if(cursor.getString(1)!=null){
+        if (cursor.getString(1) != null) {
             visibl = true;
             Glide.with(imageView.getContext())
                     .load(cursor.getString(1))
                     .into(imageView);
             imageView.setVisibility(View.VISIBLE);
             button.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             imageView.setVisibility(View.GONE);
         }
         return v;

@@ -31,20 +31,20 @@ public class ChoiseAction extends AppCompatActivity {
                 switch (v.getId()) {
                     case R.id.theori:
                         intent.putExtra(INTENT_KEY, 1);
-                        showPopupMenu(v);
+                        startActivity(intent);
                         return;
                     case R.id.learn:
                         intent.putExtra(INTENT_KEY, 2);
-                        showPopupMenu(v);
+                        startActivity(intent);
                         return;
                     case R.id.tests:
                         intent.putExtra(INTENT_KEY, 3);
-                        showPopupMenu(v);
+                        startActivity(intent);
                         return;
-                    default:
+
 
                 }
-
+                startActivity(intent);
             }
         };
 
@@ -52,31 +52,5 @@ public class ChoiseAction extends AppCompatActivity {
         theoriBtn.setOnClickListener(onClick);
         testsBtn.setOnClickListener(onClick);
 
-    }
-
-    private void showPopupMenu(View v) {
-        PopupMenu popupMenu = new PopupMenu(ChoiseAction.this, v);
-        popupMenu.inflate(R.menu.popup);
-
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.algebra:
-                        intent.putExtra(SUB_KEY, 0);
-                        startActivity(intent);
-                        return true;
-                    case R.id.geometry:
-                        intent.putExtra(SUB_KEY, 1);
-                        startActivity(intent);
-                        return true;
-                    default:
-                        return false;
-                }
-
-            }
-        });
-
-        popupMenu.show();
     }
 }

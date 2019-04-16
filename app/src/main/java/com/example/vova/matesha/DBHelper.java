@@ -16,12 +16,12 @@ public class DBHelper extends SQLiteAssetHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public Cursor getCursor(String query,String[] selctionArgs){
+    public Cursor getCursor(String query, String[] selctionArgs) {
         Cursor cursor;
 
         SQLiteDatabase db = getReadableDatabase();
 
-        cursor = db.rawQuery(query,selctionArgs);
+        cursor = db.rawQuery(query, selctionArgs);
 
         return cursor;
     }

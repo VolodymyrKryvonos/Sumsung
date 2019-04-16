@@ -8,4 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="PagerTabStripText"> <item name="android:textSize">20dp</item> </style>
+
 </resources>

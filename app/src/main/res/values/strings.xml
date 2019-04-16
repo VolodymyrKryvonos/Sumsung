@@ -5,5 +5,6 @@
     <string name="tests_btn">Тести і зідачі</string>
     <string name="algebra">Алгебра</string>
     <string name="geometry">Геометрія</string>
-
+    <string name="string_next">Наступне</string>
+    <string name="check">Перевірити</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.vova.matesha;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+
+import static com.example.vova.matesha.ChoiseAction.SUB_KEY;
 
 public class ChoseChapter extends AppCompatActivity {
     ViewPager pager;
@@ -38,6 +41,7 @@ public class ChoseChapter extends AppCompatActivity {
             }
         });
     }
+
     private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
         public MyFragmentPagerAdapter(FragmentManager fm) {
@@ -46,12 +50,22 @@ public class ChoseChapter extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return Chapters.newInstance(position);
+            return Chapters.newInstance(position+1);
         }
 
         @Override
         public int getCount() {
             return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            String subj;
+            if (position==0){
+                subj = getString(R.string.algebra);
+            }
+            else subj = getString(R.string.geometry);
+            return subj;
         }
 
     }

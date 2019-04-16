@@ -22,20 +22,17 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Chapters extends Fragment implements Adapter.onBtnClickListener {
 
-    static Chapters newInstance(int page) {
-        Chapters pageFragment = new Chapters();
-        return pageFragment;
-    }
-
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     DBHelper helper;
+    int id;
+    int from;
     ArrayList<Chapter> chapters = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.algebra_chapters_fragment,container,false);
+        View view = inflater.inflate(R.layout.algebra_chapters_fragment, container, false);
         try {
             fillChapters();
         } catch (IOException e) {
@@ -43,29 +40,40 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener {
         }
 
         recyclerView = view.findViewById(R.id.algebra_list);
-        adapter = new Adapter(chapters,this);
+        adapter = new Adapter(chapters, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
         return view;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        id = getArguments().getInt("ID");
+    }
+
     private void fillChapters() throws IOException {
-        String sub = "1";
         Intent intent = getActivity().getIntent();
-        int from = intent.getExtras().getInt(ChoiseAction.SUB_KEY);
-        if (from == 0){
-            sub = "1";
-        }
-        else sub = "2";
-
         helper = new DBHelper(getContext());
-
+        from = intent.getExtras().getInt(ChoiseAction.INTENT_KEY);
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor query = db.rawQuery("SELECT chapter, _id FROM chapters WHERE subject=? ;",new String[]{sub});
-        if (query.moveToFirst()){
+        Cursor query;
+        switch (from){
+            case 1:{
+                query= db.rawQuery("SELECT chapter, _id FROM chapters WHERE subject=? ;", new String[]{id+""});
+                break;
+            }
+            case 3:{
+                query= db.rawQuery("SELECT chapter, _id FROM tasks WHERE subject=? ;", new String[]{id+""});
+                break;
+            }
+            default:query = null;
+        }
+
+        if (query.moveToFirst()) {
             do {
-                chapters.add(new Chapter(query.getString(0),query.getInt(1)));
+                chapters.add(new Chapter(query.getString(0), query.getInt(1)));
             }
             while (query.moveToNext());
 
@@ -76,8 +84,22 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener {
 
     @Override
     public void onBtnClickListener(int id) {
-            Intent intent = new Intent(getActivity(),HolderActivity.class);
-            intent.putExtra("ID",id);
-            startActivity(intent);
+        Intent intent;
+        if(from == 1){
+        intent = new Intent(getActivity(), HolderActivity.class);
+        intent.putExtra("ID", id);}
+        else {        intent = new Intent(getActivity(), TaskActivity.class);
+            intent.putExtra("SUBJECT", this.id);
+            intent.putExtra("ID", id);}
+        startActivity(intent);
+    }
+
+
+    static Chapters newInstance(int id) {
+        Chapters pageFragment = new Chapters();
+        Bundle arguments = new Bundle();
+        arguments.putInt("ID", id);
+        pageFragment.setArguments(arguments);
+        return pageFragment;
     }
 }
