@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import static com.example.vova.matesha.ChoiseAction.SUB_KEY;
 
 public class ChoseChapter extends AppCompatActivity {
+    
     ViewPager pager;
     PagerAdapter pagerAdapter;
 
@@ -22,7 +23,7 @@ public class ChoseChapter extends AppCompatActivity {
         setContentView(R.layout.activity_chose_chapter);
 
         pager = findViewById(R.id.pager);
-        pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -40,33 +41,32 @@ public class ChoseChapter extends AppCompatActivity {
 
             }
         });
+    TabLayout tabLayout = findViewById(R.id.sliding_tabs);
+    tabLayout.setupWithViewPager(pager);
     }
 
-    private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
+  final int PAGE_COUNT = 3;
+  private String tabTitles[] = new String[] { getString(R.string.algebra), getString(R.string.geometry)};
+  private Context context;
 
-        public MyFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+  public SampleFragmentPagerAdapter(FragmentManager fm) {
+    super(fm);
+  }
 
-        @Override
-        public Fragment getItem(int position) {
-            return Chapters.newInstance(position+1);
-        }
+  @Override public int getCount() {
+    return PAGE_COUNT;
+  }
 
-        @Override
-        public int getCount() {
-            return 2;
-        }
+  @Override public Fragment getItem(int position) {
+    return Chapters.newInstance(position + 1);
+  }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            String subj;
-            if (position==0){
-                subj = getString(R.string.algebra);
-            }
-            else subj = getString(R.string.geometry);
-            return subj;
-        }
+  @Override public CharSequence getPageTitle(int position) {
+    // генерируем заголовок в зависимости от позиции
+    return tabTitles[position];
+  }
+}
 
     }
 }
