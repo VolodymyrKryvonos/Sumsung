@@ -3,43 +3,110 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ChoiseAction"
     android:background="@drawable/bg">
 
-
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/learn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:text="@string/theory_btn"
-        android:textAllCaps="false"
-        android:id="@+id/theori"
-        />
-
-
-    <Button
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:id="@+id/learn"
+        android:layout_marginTop="70dp">
+        <Button
+            android:id="@+id/theori"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:drawableTop="@drawable/theory"
+            android:text="@string/theory_btn"
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:id="@+id/learn"
+            android:layout_width="120dp"
+
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/theori"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/learn"
+            android:text="@string/learn_btn"
+            android:textAllCaps="false" />
+
+        <Button
+        android:id="@+id/tests"
+        android:layout_width="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/test"
+        android:text="@string/tests_btn"
         android:textAllCaps="false"
-        android:text="@string/learn_btn"/>
+        android:layout_below="@+id/theori"    />
 
 
-
-    <Button
-        android:layout_width="wrap_content"
+        <Button
+        android:id="@+id/ZNO"
+        android:layout_width="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/tests"
         android:layout_height="wrap_content"
         android:layout_below="@+id/learn"
+        android:drawableTop="@drawable/zno"
+        android:text="@string/ZNO"
+        android:textAllCaps="false" />
+
+    </RelativeLayout>
+
+    <com.wajahatkarim3.easyflipview.EasyFlipView
+
+        android:id="@+id/flip_card"
+        android:layout_width="350dp"
+        android:layout_height="230dp"
+        android:layout_marginTop="350dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:textAllCaps="false"
-        android:text="@string/tests_btn"
-        android:id="@+id/tests"/>
+        app:flipDuration="500"
+        app:flipEnabled="true"
+        app:flipOnTouch="true"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff">
+
+            <TextView
+                android:id="@+id/back_side"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:textColor="#000"
+                android:textAlignment="center"
+                android:textSize="25dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff">
+
+            <TextView
+                android:id="@+id/front_side"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#000"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:textAlignment="center"
+                android:textSize="25dp" />
+        </RelativeLayout>
+
+
+    </com.wajahatkarim3.easyflipview.EasyFlipView>
 
 
 </RelativeLayout>

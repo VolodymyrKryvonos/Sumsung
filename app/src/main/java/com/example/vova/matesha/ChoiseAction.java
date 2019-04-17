@@ -8,10 +8,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+
+import com.wajahatkarim3.easyflipview.EasyFlipView;
 
 public class ChoiseAction extends AppCompatActivity {
     Intent intent;
     Button learnBtn, theoriBtn, testsBtn;
+    EasyFlipView card;
     public final static String INTENT_KEY = "FROM BTN";
     public final static String SUB_KEY = "ALG/GEOM";
 
@@ -23,6 +27,14 @@ public class ChoiseAction extends AppCompatActivity {
         learnBtn = findViewById(R.id.learn);
         theoriBtn = findViewById(R.id.theori);
         testsBtn = findViewById(R.id.tests);
+        card = findViewById(R.id.flip_card);
+
+        card.setOnFlipListener(new EasyFlipView.OnFlipAnimationListener() {
+            @Override
+            public void onViewFlipCompleted(EasyFlipView easyFlipView, EasyFlipView.FlipState newCurrentSide) {
+                Log.e("FLIP","flip");
+            }
+        });
 
         View.OnClickListener onClick = new View.OnClickListener() {
             @Override

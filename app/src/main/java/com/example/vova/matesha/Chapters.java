@@ -28,6 +28,7 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener {
     int id;
     int from;
     ArrayList<Chapter> chapters = new ArrayList<>();
+    SQLiteDatabase db;
 
     @Nullable
     @Override
@@ -35,6 +36,7 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener {
         View view = inflater.inflate(R.layout.algebra_chapters_fragment, container, false);
         try {
             fillChapters();
+            Log.e("OnCreateView","OnCreateView");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,7 +59,7 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener {
         Intent intent = getActivity().getIntent();
         helper = new DBHelper(getContext());
         from = intent.getExtras().getInt(ChoiseAction.INTENT_KEY);
-        SQLiteDatabase db = helper.getReadableDatabase();
+        db = helper.getReadableDatabase();
         Cursor query;
         switch (from){
             case 1:{
@@ -71,7 +73,7 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener {
             default:query = null;
         }
 
-        if (query.moveToFirst()) {
+        if (query.moveToFirst()&&query!=null) {
             do {
                 chapters.add(new Chapter(query.getString(0), query.getInt(1)));
             }
@@ -79,7 +81,7 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener {
 
         }
         query.close();
-        db.close();
+
     }
 
     @Override
@@ -90,7 +92,9 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener {
         intent.putExtra("ID", id);}
         else {        intent = new Intent(getActivity(), TaskActivity.class);
             intent.putExtra("SUBJECT", this.id);
-            intent.putExtra("ID", id);}
+            Cursor cursor = db.rawQuery("SELECT chapter FROM tasks WHERE _id=? ;", new String[]{id+""});
+            cursor.moveToFirst();
+            intent.putExtra("CHUPTER", cursor.getString(0));}
         startActivity(intent);
     }
 

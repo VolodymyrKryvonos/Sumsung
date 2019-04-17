@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Matesha</string>
-    <string name="learn_btn">Вивчення теорії</string>
+    <string name="learn_btn">Вивчення</string>
     <string name="theory_btn">Теорія</string>
     <string name="tests_btn">Тести і зідачі</string>
     <string name="algebra">Алгебра</string>
     <string name="geometry">Геометрія</string>
-    <string name="string_next">Наступне</string>
+    <string name="string_next">Пропустити</string>
     <string name="check">Перевірити</string>
+    <string name="ZNO">Тести ЗНО</string>
 </resources>

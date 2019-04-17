@@ -1,6 +1,7 @@
 package com.example.vova.matesha;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.concurrent.TimeUnit;
 
 import io.github.kexanie.library.MathView;
 
@@ -33,15 +36,13 @@ public class TaskActivity extends AppCompatActivity {
         task = findViewById(R.id.task);
         answer = findViewById(R.id.answer);
 
-        DBHelper helper = new DBHelper(this);
+        final DBHelper helper = new DBHelper(this);
         SQLiteDatabase database = helper.getReadableDatabase();
 
-        cursor = database.rawQuery("SELECT task, answer, _id FROM tasks WHERE subject=?", new String[]{intent.getExtras().getInt("SUBJECT") + ""});
+        cursor = database.rawQuery("SELECT task, answer, _id, isDone FROM tasks WHERE subject=? AND  chapter=?",
+                new String[]{intent.getExtras().getInt("SUBJECT") + "", intent.getExtras().getString("CHUPTER")});
 
         cursor.moveToFirst();
-
-        while ((cursor.getInt(2) != intent.getExtras().getInt("ID") && (cursor.moveToNext()))) {
-        }
 
         updateTask();
 
@@ -53,6 +54,14 @@ public class TaskActivity extends AppCompatActivity {
                 if (answer.getText() != null) {
                     if (answer.getText().toString().equals(cursor.getString(1))) {
                         Toast.makeText(TaskActivity.this, "Correct", Toast.LENGTH_LONG).show();
+                        ContentValues cv = new ContentValues();
+                        cv.put("isDone", 1);
+
+                        if (cursor.moveToNext()) {
+                            updateTask();
+                        }
+                        else {}
+
                     } else Toast.makeText(TaskActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                 }
                 answer.setText("");
@@ -63,19 +72,21 @@ public class TaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (cursor.moveToNext()) {
-                } else {
-                    cursor.moveToFirst();
+                    updateTask();
                 }
-                updateTask();
             }
         });
 
 
     }
 
+
+
+
     private void updateTask() {
+
         if (cursor.getString(0) != null) {
-            task.setText("<font size=5>" + cursor.getString(0) + "</font>" + "<br>");
+            task.setText("<font size=5>" + cursor.getString(0) + "</font>");
         }
         answer.setText("");
     }

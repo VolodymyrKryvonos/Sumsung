@@ -1,16 +1,13 @@
 package com.example.vova.matesha;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-
-import static com.example.vova.matesha.ChoiseAction.SUB_KEY;
 
 public class ChoseChapter extends AppCompatActivity {
     
@@ -46,9 +43,9 @@ public class ChoseChapter extends AppCompatActivity {
     }
 
 public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
-  final int PAGE_COUNT = 3;
+  final int PAGE_COUNT = 2;
   private String tabTitles[] = new String[] { getString(R.string.algebra), getString(R.string.geometry)};
-  private Context context;
+
 
   public SampleFragmentPagerAdapter(FragmentManager fm) {
     super(fm);
@@ -69,4 +66,4 @@ public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
 }
 
     }
-}
+
