@@ -1,0 +1,17 @@
+package com.example.vova.matesha;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+public class ZnoHolder extends AppCompatActivity {
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+    }
+}

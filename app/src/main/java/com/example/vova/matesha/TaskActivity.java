@@ -39,8 +39,8 @@ public class TaskActivity extends AppCompatActivity {
         final DBHelper helper = new DBHelper(this);
         SQLiteDatabase database = helper.getReadableDatabase();
 
-        cursor = database.rawQuery("SELECT task, answer, _id, isDone FROM tasks WHERE subject=? AND  chapter=?",
-                new String[]{intent.getExtras().getInt("SUBJECT") + "", intent.getExtras().getString("CHUPTER")});
+        cursor = database.rawQuery("SELECT task, answer, _id, isDone FROM tasks WHERE chapter=? AND isDone=0",
+                new String[]{intent.getExtras().getString("CHUPTER")});
 
         cursor.moveToFirst();
 

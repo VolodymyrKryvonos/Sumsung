@@ -1,36 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
     android:orientation="vertical">
+
+
+
+    <RelativeLayout
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/flip_card">
+    <Button
+        android:id="@+id/A"
+        android:layout_marginRight="10dp"
+        android:layout_width="165dp"
+        android:layout_height="80dp"
+        android:layout_toLeftOf="@+id/help"/>
+
+    <Button
+        android:id="@+id/B"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/help"
+        android:layout_width="165dp"
+        android:layout_height="80dp" />
+
+    <Button
+        android:id="@+id/C"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/help"
+        android:layout_below="@id/A"
+        android:layout_width="165dp"
+        android:layout_height="80dp" />
+
+    <Button
+        android:layout_below="@id/B"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/help"
+        android:id="@+id/D"
+        android:layout_width="165dp"
+        android:layout_height="80dp" />
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="80dp"
+            android:id="@+id/learn_btn"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/C"
+            android:text="@string/learn"
+            android:textSize="25dp"
+            android:textAllCaps="false"/>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/help"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
 
     <com.wajahatkarim3.easyflipview.EasyFlipView
 
         android:id="@+id/flip_card"
         android:layout_width="350dp"
         android:layout_height="230dp"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+
+        app:flipOnTouch="false"
         app:flipDuration="500"
-        app:flipEnabled="true"
-        app:flipOnTouch="true"
-        >
+        app:flipEnabled="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#fff">
 
-            <TextView
+            <io.github.kexanie.library.MathView
                 android:id="@+id/back_side"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:textColor="#000"
                 android:textAlignment="center"
+                android:textColor="#000"
                 android:textSize="25dp" />
         </RelativeLayout>
 
@@ -39,19 +95,57 @@
             android:layout_height="match_parent"
             android:background="#fff">
 
-            <TextView
+            <io.github.kexanie.library.MathView
                 android:id="@+id/front_side"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:textColor="#000"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:textAlignment="center"
+                android:textColor="#000"
                 android:textSize="25dp" />
         </RelativeLayout>
 
 
     </com.wajahatkarim3.easyflipview.EasyFlipView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="@color/ToolBar"
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/complit_1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/circle"></ImageView>
+        <ImageView
+            android:id="@+id/complit_2"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@+id/complit_1"
+            android:layout_height="match_parent"
+            android:src="@drawable/circle"/>
+        <ImageView
+            android:id="@+id/complit_3"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@+id/complit_2"
+            android:layout_height="match_parent"
+            android:src="@drawable/circle"/>
+        <ImageView
+            android:id="@+id/fail_1"
+            android:layout_toLeftOf="@id/fail_2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/circle"/>
+
+        <ImageView
+            android:id="@+id/fail_2"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/circle"/>
+    </RelativeLayout>
 
 </RelativeLayout>

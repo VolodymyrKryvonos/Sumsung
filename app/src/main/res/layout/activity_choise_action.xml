@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ChoiseAction"
-    android:background="@drawable/bg">
+    android:background="@drawable/bg"
+    tools:context=".ChoiseAction">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/Toolbar">
+
+        <TextView
+            android:id="@+id/toolbarTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"
+            android:textSize="25dp" />
+    </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp">
+        android:layout_marginTop="50dp">
+
         <Button
             android:id="@+id/theori"
             android:layout_width="120dp"
@@ -26,36 +41,36 @@
             android:id="@+id/learn"
             android:layout_width="120dp"
 
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/theori"
-            android:layout_height="wrap_content"
             android:drawableTop="@drawable/learn"
             android:text="@string/learn_btn"
             android:textAllCaps="false" />
 
         <Button
-        android:id="@+id/tests"
-        android:layout_width="120dp"
-            android:layout_marginTop="10dp"
+            android:id="@+id/tests"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/theori"
             android:layout_marginLeft="10dp"
-        android:layout_height="wrap_content"
-        android:drawableTop="@drawable/test"
-        android:text="@string/tests_btn"
-        android:textAllCaps="false"
-        android:layout_below="@+id/theori"    />
+            android:layout_marginTop="10dp"
+            android:drawableTop="@drawable/test"
+            android:text="@string/tests_btn"
+            android:textAllCaps="false" />
 
 
         <Button
-        android:id="@+id/ZNO"
-        android:layout_width="120dp"
-            android:layout_marginTop="10dp"
+            android:id="@+id/ZNO"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/learn"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/tests"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/learn"
-        android:drawableTop="@drawable/zno"
-        android:text="@string/ZNO"
-        android:textAllCaps="false" />
+            android:drawableTop="@drawable/zno"
+            android:text="@string/ZNO"
+            android:textAllCaps="false" />
 
     </RelativeLayout>
 
@@ -64,12 +79,11 @@
         android:id="@+id/flip_card"
         android:layout_width="350dp"
         android:layout_height="230dp"
-        android:layout_marginTop="350dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="350dp"
         app:flipDuration="500"
         app:flipEnabled="true"
-        app:flipOnTouch="true"
-        >
+        app:flipOnTouch="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -83,8 +97,8 @@
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:textColor="#000"
                 android:textAlignment="center"
+                android:textColor="#000"
                 android:textSize="25dp" />
         </RelativeLayout>
 
@@ -98,10 +112,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:textColor="#000"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:textAlignment="center"
+                android:textColor="#000"
                 android:textSize="25dp" />
         </RelativeLayout>
 

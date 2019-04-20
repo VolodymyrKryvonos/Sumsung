@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Matesha</string>
+    <string name="app_name">M4G</string>
     <string name="learn_btn">Вивчення</string>
     <string name="theory_btn">Теорія</string>
     <string name="tests_btn">Тести і зідачі</string>
@@ -8,4 +8,6 @@
     <string name="string_next">Пропустити</string>
     <string name="check">Перевірити</string>
     <string name="ZNO">Тести ЗНО</string>
+    <string name="full_project_name">Math for Graduates</string>
+    <string name="learn">Вивчити</string>
 </resources>

@@ -16,11 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class Chapters extends Fragment implements Adapter.onBtnClickListener {
+public class Chapters extends Fragment implements Adapter.onBtnClickListener, Serializable{
 
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
@@ -36,7 +37,7 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener {
         View view = inflater.inflate(R.layout.algebra_chapters_fragment, container, false);
         try {
             fillChapters();
-            Log.e("OnCreateView","OnCreateView");
+            Log.e("OnCreateView", "OnCreateView");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,19 +62,28 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener {
         from = intent.getExtras().getInt(ChoiseAction.INTENT_KEY);
         db = helper.getReadableDatabase();
         Cursor query;
-        switch (from){
-            case 1:{
-                query= db.rawQuery("SELECT chapter, _id FROM chapters WHERE subject=? ;", new String[]{id+""});
+        switch (from) {
+            case 1: {
+                query = db.rawQuery("SELECT chapter, _id FROM chapters WHERE subject=? ;", new String[]{id + ""});
                 break;
             }
-            case 3:{
-                query= db.rawQuery("SELECT chapter, _id FROM tasks WHERE subject=? ;", new String[]{id+""});
+            case 2: {
+                query = db.rawQuery("SELECT chapter, _id FROM chapterForCard", new String[]{});
                 break;
             }
-            default:query = null;
+            case 3: {
+                query = db.rawQuery("SELECT chapter, _id FROM task_chapters WHERE subject=? ;", new String[]{id + ""});
+                break;
+            }
+            case 4: {
+                query = db.rawQuery("SELECT chapter, _id FROM task_chapters WHERE subject=? ;", new String[]{id + ""});
+                break;
+            }
+            default:
+                query = null;
         }
 
-        if (query.moveToFirst()&&query!=null) {
+        if (query.moveToFirst() && query != null) {
             do {
                 chapters.add(new Chapter(query.getString(0), query.getInt(1)));
             }
@@ -87,14 +97,27 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener {
     @Override
     public void onBtnClickListener(int id) {
         Intent intent;
-        if(from == 1){
-        intent = new Intent(getActivity(), HolderActivity.class);
-        intent.putExtra("ID", id);}
-        else {        intent = new Intent(getActivity(), TaskActivity.class);
+        if (from == 1) {
+            intent = new Intent(getActivity(), HolderActivity.class);
+            intent.putExtra("ID", id);
+        } else if (from == 3) {
+            intent = new Intent(getActivity(), TaskActivity.class);
             intent.putExtra("SUBJECT", this.id);
-            Cursor cursor = db.rawQuery("SELECT chapter FROM tasks WHERE _id=? ;", new String[]{id+""});
+            Cursor cursor = db.rawQuery("SELECT chapter FROM task_chapters WHERE _id=? ;", new String[]{id + ""});
             cursor.moveToFirst();
-            intent.putExtra("CHUPTER", cursor.getString(0));}
+            intent.putExtra("CHUPTER", cursor.getString(0));
+        }
+            else if(from==2){
+            intent = new Intent(getActivity(), Card.class);
+            Cursor cursor = db.rawQuery("SELECT chapter FROM chapterForCard WHERE _id=? ;", new String[]{id + ""});
+            cursor.moveToFirst();
+            intent.putExtra("CHUPTER",cursor.getString(0));
+        }
+        else {
+            intent = new Intent(getActivity(), ZnoHolder.class);
+            intent.putExtra("FRAGMENT", 2);
+            intent.putExtra("ID",id);
+        }
         startActivity(intent);
     }
 

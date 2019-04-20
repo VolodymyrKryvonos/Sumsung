@@ -52,7 +52,7 @@ public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
   }
 
   @Override public int getCount() {
-    return PAGE_COUNT;
+      return PAGE_COUNT;
   }
 
   @Override public Fragment getItem(int position) {
@@ -60,7 +60,6 @@ public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
   }
 
   @Override public CharSequence getPageTitle(int position) {
-    // генерируем заголовок в зависимости от позиции
     return tabTitles[position];
   }
 }

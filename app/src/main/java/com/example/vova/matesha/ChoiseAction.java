@@ -5,24 +5,22 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.PopupMenu;
-import android.util.Log;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.wajahatkarim3.easyflipview.EasyFlipView;
-
 import io.github.kexanie.library.MathView;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
 public class ChoiseAction extends AppCompatActivity {
     Intent intent;
-    Button learnBtn, theoriBtn, testsBtn;
+    Button learnBtn, theoriBtn, testsBtn, znoBtn;
     DBHelper helper;
     EasyFlipView card;
+    Toolbar toolbar;
     MathView front, back;
     public final static String INTENT_KEY = "FROM BTN";
     public final static String SUB_KEY = "ALG/GEOM";
@@ -36,11 +34,21 @@ public class ChoiseAction extends AppCompatActivity {
         helper = new DBHelper(this);
         SQLiteDatabase db = helper.getReadableDatabase();
         final Cursor query = db.rawQuery("SELECT shortTheory FROM learn ORDER BY RANDOM()", null);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        TextView textView = toolbar.findViewById(R.id.toolbarTextView);
+        textView.setText(R.string.full_project_name);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         front = findViewById(R.id.front_side);
         back = findViewById(R.id.back_side);
         learnBtn = findViewById(R.id.learn);
         theoriBtn = findViewById(R.id.theori);
         testsBtn = findViewById(R.id.tests);
+        znoBtn = findViewById(R.id.ZNO);
+
         card = findViewById(R.id.flip_card);
 
         if (query.moveToFirst()) {
@@ -83,27 +91,28 @@ public class ChoiseAction extends AppCompatActivity {
         View.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent = new Intent(ChoiseAction.this, ChoseChapter.class);
                 switch (v.getId()) {
                     case R.id.theori:
+                        intent = new Intent(ChoiseAction.this, ChoseChapter.class);
                         intent.putExtra(INTENT_KEY, 1);
-                        startActivity(intent);
-                        return;
+                        break;
                     case R.id.learn:
+                        intent = new Intent(ChoiseAction.this, ZnoCard.class);
                         intent.putExtra(INTENT_KEY, 2);
-                        startActivity(intent);
-                        return;
+                        break;
                     case R.id.tests:
+                        intent = new Intent(ChoiseAction.this, ChoseChapter.class);
                         intent.putExtra(INTENT_KEY, 3);
-                        startActivity(intent);
-                        return;
-
-
+                        break;
+                    case R.id.ZNO:
+                        intent = new Intent(ChoiseAction.this, ZnoCard.class);
+                        intent.putExtra(INTENT_KEY, 4);
+                        break;
                 }
                 startActivity(intent);
             }
         };
-
+        znoBtn.setOnClickListener(onClick);
         learnBtn.setOnClickListener(onClick);
         theoriBtn.setOnClickListener(onClick);
         testsBtn.setOnClickListener(onClick);
