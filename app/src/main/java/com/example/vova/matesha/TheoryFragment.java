@@ -60,7 +60,7 @@ public class TheoryFragment extends Fragment {
             }
         });
         if (cursor.moveToFirst() && (cursor.getString(0) != null)) {
-            textView.setText("<font size=5>" + cursor.getString(0) + "</font>" + "<br>");
+            textView.setText("<font size=4>" + cursor.getString(0) + "</font>" + "<br>");
 
 
         }

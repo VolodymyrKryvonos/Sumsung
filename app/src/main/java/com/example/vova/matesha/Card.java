@@ -1,9 +1,11 @@
 package com.example.vova.matesha;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.wajahatkarim3.easyflipview.EasyFlipView;
+
+import java.util.concurrent.TimeUnit;
 
 import io.github.kexanie.library.MathView;
 
@@ -25,13 +29,14 @@ public class Card extends AppCompatActivity {
     ImageView complite1, complite2, complite3, fail1, fail2;
     Intent intent;
     Cursor query;
+    DBHelper helper;
+    Handler handler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.card_layout);
         setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
-
         intent = getIntent();
         learn = findViewById(R.id.learn_btn);
         card = findViewById(R.id.flip_card);
@@ -55,9 +60,9 @@ public class Card extends AppCompatActivity {
         learn.setOnClickListener(onClick);
 
 
-        DBHelper helper = new DBHelper(this);
+        helper = new DBHelper(this);
         SQLiteDatabase db = helper.getReadableDatabase();
-        query = db.rawQuery("SELECT * FROM card WHERE chapter = ? ORDER by random() ", new String[]{intent.getStringExtra("CHUPTER")});
+        query = db.rawQuery("SELECT * FROM card WHERE chapter = ? AND corect_answer<3 ORDER by random() ", new String[]{intent.getStringExtra("CHUPTER")});
 
         query.moveToFirst();
         updateCard();
@@ -65,6 +70,16 @@ public class Card extends AppCompatActivity {
     }
 
     private void updateCard() {
+        btnA.setEnabled(true);
+        btnB.setEnabled(true);
+        btnC.setEnabled(true);
+        btnD.setEnabled(true);
+        learn.setEnabled(true);
+        btnA.setBackgroundResource(android.R.drawable.btn_default);
+        btnB.setBackgroundResource(android.R.drawable.btn_default);
+        btnC.setBackgroundResource(android.R.drawable.btn_default);
+        btnD.setBackgroundResource(android.R.drawable.btn_default);
+
         btnA.setText(query.getString(3));
         btnB.setText(query.getString(4));
         btnC.setText(query.getString(5));
@@ -72,6 +87,11 @@ public class Card extends AppCompatActivity {
         front.setText(query.getString(2));
         back.setText(query.getString(1));
         switch (query.getInt(8)) {
+            case 0: {
+                complite1.setImageResource(R.drawable.circle);
+                complite2.setImageResource(R.drawable.circle);
+                break;
+            }
             case 1: {
                 complite1.setImageResource(R.drawable.green_circle);
                 break;
@@ -82,8 +102,8 @@ public class Card extends AppCompatActivity {
             }
         }
         if (query.getInt(9) == 1) {
-            fail2.setImageResource(R.drawable.red_circle);
-        }
+            fail1.setImageResource(R.drawable.red_circle);
+        } else fail1.setImageResource(R.drawable.circle);
     }
 
     View.OnClickListener onClick = new View.OnClickListener() {
@@ -91,82 +111,230 @@ public class Card extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.A: {
+                    Log.e("BtnClecked", "A");
                     card.flipTheView();
                     checkAnswer(view.getId());
                     break;
                 }
                 case R.id.B: {
+                    Log.e("BtnClecked", "B");
                     card.flipTheView();
                     checkAnswer(view.getId());
                     break;
                 }
                 case R.id.C: {
+                    Log.e("BtnClecked", "C");
                     card.flipTheView();
                     checkAnswer(view.getId());
                     break;
                 }
                 case R.id.D: {
+                    Log.e("BtnClecked", "D");
                     card.flipTheView();
                     checkAnswer(view.getId());
                     break;
                 }
                 case R.id.learn_btn: {
                     card.flipTheView();
-                    query.moveToNext();
+
                     break;
                 }
             }
         }
 
         private void checkAnswer(int id) {
-        int correct = query.getInt(10);
-        switch (correct){
-            case 1:{
-                if(id==R.id.A){
-                    btnA.setBackgroundResource(R.color.green);
+            int correct = query.getInt(10);
+            int complite = query.getInt(8);
+            int fail = query.getInt(9);
+            switch (correct) {
+                case 1: {
+                    if (id == R.id.A) {
+                        btnA.setBackgroundResource(R.color.green);
+                        switch (complite) {
+                            case 0:
+                                complite1.setImageResource(R.drawable.green_circle);
+                                break;
+                            case 1:
+                                complite2.setImageResource(R.drawable.green_circle);
+                                break;
+                            case 2:
+                                complite3.setImageResource(R.drawable.green_circle);
+                                break;
+                        }
+                        updateBd(complite, true);
+                    } else {
+                        btnA.setBackgroundResource(R.color.green);
+                        View view = findViewById(id);
+                        view.setBackgroundResource(R.color.red);
+                        switch (fail) {
+                            case 0:
+                                fail1.setImageResource(R.drawable.red_circle);
+                                break;
+                            case 1:
+                                fail2.setImageResource(R.drawable.red_circle);
+                                break;
+                        }
+                        updateBd(fail, false);
+                    }
+                    break;
                 }
-                else{
-                    btnA.setBackgroundResource(R.color.red);
-                    View view = findViewById(id);
-                    view.setBackgroundResource(R.color.green);
+                case 2: {
+                    if (id == R.id.B) {
+                        btnB.setBackgroundResource(R.color.green);
+                        switch (complite) {
+                            case 0:
+                                complite1.setImageResource(R.drawable.green_circle);
+                                break;
+                            case 1:
+                                complite2.setImageResource(R.drawable.green_circle);
+                                break;
+                            case 2:
+                                complite3.setImageResource(R.drawable.green_circle);
+                                break;
+                        }
+                        updateBd(complite, true);
+
+                    } else {
+                        btnB.setBackgroundResource(R.color.green);
+                        View view = findViewById(id);
+                        view.setBackgroundResource(R.color.red);
+                        switch (fail) {
+                            case 0:
+                                fail1.setImageResource(R.drawable.red_circle);
+                                break;
+                            case 1:
+                                fail2.setImageResource(R.drawable.red_circle);
+                                break;
+                        }
+                        updateBd(fail, false);
+                    }
+                    break;
                 }
-                break;
+                case 3: {
+                    if (id == R.id.C) {
+                        btnC.setBackgroundResource(R.color.green);
+                        switch (complite) {
+                            case 0:
+                                complite1.setImageResource(R.drawable.green_circle);
+                                break;
+                            case 1:
+                                complite2.setImageResource(R.drawable.green_circle);
+                                break;
+                            case 2:
+                                complite3.setImageResource(R.drawable.green_circle);
+                                break;
+                        }
+                        updateBd(complite, true);
+                    } else {
+                        btnC.setBackgroundResource(R.color.green);
+                        View view = findViewById(id);
+                        view.setBackgroundResource(R.color.red);
+                        switch (fail) {
+                            case 0:
+                                fail1.setImageResource(R.drawable.red_circle);
+                                break;
+                            case 1:
+                                fail2.setImageResource(R.drawable.red_circle);
+                                break;
+                        }
+                        updateBd(fail, false);
+                    }
+                    break;
+                }
+                case 4: {
+                    if (id == R.id.D) {
+                        btnD.setBackgroundResource(R.color.green);
+                        switch (complite) {
+                            case 0:
+                                complite1.setImageResource(R.drawable.green_circle);
+                                break;
+                            case 1:
+                                complite2.setImageResource(R.drawable.green_circle);
+                                break;
+                            case 2:
+                                complite3.setImageResource(R.drawable.green_circle);
+                                break;
+                        }
+                        updateBd(complite, true);
+                    } else {
+                        btnD.setBackgroundResource(R.color.green);
+                        View view = findViewById(id);
+                        view.setBackgroundResource(R.color.red);
+                        switch (fail) {
+                            case 0:
+                                fail1.setImageResource(R.drawable.red_circle);
+                                break;
+                            case 1:
+                                fail2.setImageResource(R.drawable.red_circle);
+                                break;
+                        }
+                        updateBd(fail, false);
+
+                    }
+                    break;
+                }
             }
-            case 2:{
-                if(id==R.id.B){
-                    btnA.setBackgroundResource(R.color.green);
-                }
-                else{
-                    btnA.setBackgroundResource(R.color.red);
-                    View view = findViewById(id);
-                    view.setBackgroundResource(R.color.green);
-                }
-                break;
-            }
-            case 3:{
-                if(id==R.id.C){
-                    btnA.setBackgroundResource(R.color.green);
-                }
-                else{
-                    btnA.setBackgroundResource(R.color.red);
-                    View view = findViewById(id);
-                    view.setBackgroundResource(R.color.green);
-                }
-                break;
-            }
-            case 4:{
-                if(id==R.id.D){
-                    btnA.setBackgroundResource(R.color.green);
-                }
-                else{
-                    btnA.setBackgroundResource(R.color.red);
-                    View view = findViewById(id);
-                    view.setBackgroundResource(R.color.green);
-                }
-                break;
-            }
-        }
+
+            btnA.setEnabled(false);
+            btnB.setEnabled(false);
+            btnC.setEnabled(false);
+            btnD.setEnabled(false);
+            learn.setEnabled(false);
+            nextCard();
+
         }
     };
 
+
+    private void updateBd(int result, boolean correct) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        if (!correct) {
+            if (result + 1 == 2) {
+                contentValues.put("wrong_answer", 0);
+                contentValues.put("corect_answer", 0);
+                complite1.setImageResource(R.drawable.circle);
+                complite2.setImageResource(R.drawable.circle);
+            } else contentValues.put("wrong_answer", 1);
+        } else {
+            contentValues.put("corect_answer", result + 1);
+        }
+        db.update("card", contentValues, "_id=?", new String[]{query.getInt(0) + ""});
+        db.close();
+        SQLiteDatabase database = helper.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT corect_answer, wrong_answer FROM card WHERE _id = ?", new String[]{query.getInt(0) + ""});
+        cursor.moveToFirst();
+        Log.e("corect_answer", cursor.getInt(0) + "");
+        Log.e("wrong_answer", cursor.getInt(1) + "");
+    }
+
+    private void nextCard() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                timer();
+                query.moveToNext();
+
+            }
+        });
+        thread.start();
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        card.flipTheView();
+        updateCard();
+    }
+
+    private void timer() {
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
+

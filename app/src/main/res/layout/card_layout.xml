@@ -8,57 +8,60 @@
     android:orientation="vertical">
 
 
-
     <RelativeLayout
         android:layout_width="360dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_below="@id/flip_card"
         android:layout_centerInParent="true"
-        android:layout_below="@id/flip_card">
-    <Button
-        android:id="@+id/A"
-        android:layout_marginRight="10dp"
-        android:layout_width="165dp"
-        android:layout_height="80dp"
-        android:layout_toLeftOf="@+id/help"/>
+        android:layout_marginTop="30dp">
 
-    <Button
-        android:id="@+id/B"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/help"
-        android:layout_width="165dp"
-        android:layout_height="80dp" />
-
-    <Button
-        android:id="@+id/C"
-        android:layout_marginRight="10dp"
-        android:layout_toLeftOf="@+id/help"
-        android:layout_below="@id/A"
-        android:layout_width="165dp"
-        android:layout_height="80dp" />
-
-    <Button
-        android:layout_below="@id/B"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/help"
-        android:id="@+id/D"
-        android:layout_width="165dp"
-        android:layout_height="80dp" />
         <Button
+            android:id="@+id/A"
+            android:layout_width="165dp"
+            android:layout_height="80dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/help" />
+
+        <Button
+            android:id="@+id/B"
+            android:layout_width="165dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/help" />
+
+        <Button
+            android:id="@+id/C"
+            android:layout_width="165dp"
+            android:layout_height="80dp"
+            android:layout_below="@id/A"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/help" />
+
+        <Button
+            android:id="@+id/D"
+            android:layout_marginTop="10dp"
+            android:layout_width="165dp"
+            android:layout_height="80dp"
+            android:layout_below="@id/B"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/help" />
+
+        <Button
+            android:id="@+id/learn_btn"
             android:layout_width="300dp"
             android:layout_height="80dp"
-            android:id="@+id/learn_btn"
-            android:layout_centerHorizontal="true"
             android:layout_below="@+id/C"
+            android:layout_centerHorizontal="true"
             android:text="@string/learn"
-            android:textSize="25dp"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:textSize="25dp" />
 
         <Space
+            android:id="@+id/help"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/help"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 
     <com.wajahatkarim3.easyflipview.EasyFlipView
@@ -69,9 +72,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
 
-        app:flipOnTouch="false"
         app:flipDuration="500"
-        app:flipEnabled="true">
+        app:flipEnabled="true"
+        app:flipOnTouch="false">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -112,40 +115,43 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/ToolBar"
-        android:layout_height="60dp">
+        android:background="@color/ToolBar">
 
         <ImageView
             android:id="@+id/complit_1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/circle"></ImageView>
+
         <ImageView
             android:id="@+id/complit_2"
             android:layout_width="wrap_content"
-            android:layout_toRightOf="@+id/complit_1"
             android:layout_height="match_parent"
-            android:src="@drawable/circle"/>
+            android:layout_toRightOf="@+id/complit_1"
+            android:src="@drawable/circle" />
+
         <ImageView
             android:id="@+id/complit_3"
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_toRightOf="@+id/complit_2"
-            android:layout_height="match_parent"
-            android:src="@drawable/circle"/>
-        <ImageView
-            android:id="@+id/fail_1"
-            android:layout_toLeftOf="@id/fail_2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/circle"/>
+            android:src="@drawable/circle" />
 
         <ImageView
             android:id="@+id/fail_2"
-            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/circle"/>
+            android:layout_toLeftOf="@id/fail_1"
+            android:src="@drawable/circle" />
+
+        <ImageView
+            android:id="@+id/fail_1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/circle" />
     </RelativeLayout>
 
 </RelativeLayout>
