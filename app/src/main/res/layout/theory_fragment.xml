@@ -36,7 +36,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:text="$$x=\frac{1+y}{1+2z^2}$$"
             android:textAlignment="center"
             android:textColor="#000"
             android:textSize="20dp" />

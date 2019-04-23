@@ -44,4 +44,18 @@
         android:layout_marginBottom="20dp"
         android:text="@string/string_next"
         android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/loser"
+        android:background="@drawable/buttonshape"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/answer"
+        android:layout_alignParentRight="true"
+        android:text="@string/string_next"
+        android:layout_marginRight="30dp"
+        android:visibility="gone"
+        android:layout_marginTop="20dp"
+        android:textAllCaps="false"/>
+
 </RelativeLayout>

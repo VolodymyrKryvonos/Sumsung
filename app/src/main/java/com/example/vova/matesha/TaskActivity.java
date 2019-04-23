@@ -2,10 +2,12 @@ package com.example.vova.matesha;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.IntRange;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,12 +21,13 @@ import java.util.concurrent.TimeUnit;
 import io.github.kexanie.library.MathView;
 
 public class TaskActivity extends AppCompatActivity {
-
-    Button nextBtn, checkBtn;
+    DBHelper helper;
+    Button nextBtn, checkBtn, looser;
     EditText answer;
     MathView task;
     Intent intent;
     Cursor cursor;
+    SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +38,10 @@ public class TaskActivity extends AppCompatActivity {
         checkBtn = findViewById(R.id.check);
         task = findViewById(R.id.task);
         answer = findViewById(R.id.answer);
+        looser = findViewById(R.id.loser);
 
-        final DBHelper helper = new DBHelper(this);
-        SQLiteDatabase database = helper.getReadableDatabase();
-
-        cursor = database.rawQuery("SELECT task, answer, _id, isDone FROM tasks WHERE chapter=? AND isDone=0",
-                new String[]{intent.getExtras().getString("CHUPTER")});
-
-        cursor.moveToFirst();
-
+        helper = new DBHelper(this);
+        database = helper.getReadableDatabase();
         updateTask();
 
 
@@ -56,11 +54,10 @@ public class TaskActivity extends AppCompatActivity {
                         Toast.makeText(TaskActivity.this, "Correct", Toast.LENGTH_LONG).show();
                         ContentValues cv = new ContentValues();
                         cv.put("isDone", 1);
+                        database.update("tasks", cv, "_id=?", new String[]{cursor.getInt(2) + ""});
+                        cursor.moveToNext();
+                        updateTask();
 
-                        if (cursor.moveToNext()) {
-                            updateTask();
-                        }
-                        else {}
 
                     } else Toast.makeText(TaskActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                 }
@@ -71,23 +68,43 @@ public class TaskActivity extends AppCompatActivity {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (cursor.moveToNext()) {
-                    updateTask();
-                }
+                cursor.moveToNext();
+                updateTask();
             }
         });
 
 
     }
 
-
-
-
     private void updateTask() {
 
-        if (cursor.getString(0) != null) {
-            task.setText("<font size=5>" + cursor.getString(0) + "</font>");
+        if (cursor == null || cursor.isBeforeFirst() || cursor.isAfterLast()) {
+            cursor = database.rawQuery("SELECT task, answer, _id, isDone FROM tasks WHERE chapter=? AND isDone=0",
+                    new String[]{intent.getExtras().getString("CHUPTER")});
+            cursor.moveToFirst();
         }
+        if (cursor.getCount() == 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+            builder.setTitle("Congratulations!")
+                    .setMessage("Congratulations!")
+                    .setCancelable(false)
+                    .setNegativeButton("ОК",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    ContentValues contentValues = new ContentValues();
+                                    contentValues.put("isDone", 0);
+                                    database.update("tasks", contentValues, null, null);
+                                    dialog.cancel();
+                                    finish();
+                                }
+                            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        } else if (cursor.getString(0) != null) {
+            Log.e("Count", cursor.getCount() + "");
+            task.setText("<font size=5><p align=\"center\">" + cursor.getString(0) + "</p></font>");
+        }
+
         answer.setText("");
     }
 }

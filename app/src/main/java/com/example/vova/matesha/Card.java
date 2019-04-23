@@ -1,12 +1,13 @@
 package com.example.vova.matesha;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,7 +16,6 @@ import android.widget.ImageView;
 
 import com.wajahatkarim3.easyflipview.EasyFlipView;
 
-import java.util.concurrent.TimeUnit;
 
 import io.github.kexanie.library.MathView;
 
@@ -30,7 +30,8 @@ public class Card extends AppCompatActivity {
     Intent intent;
     Cursor query;
     DBHelper helper;
-    Handler handler;
+    SQLiteDatabase db;
+    boolean flag = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,49 +62,93 @@ public class Card extends AppCompatActivity {
 
 
         helper = new DBHelper(this);
-        SQLiteDatabase db = helper.getReadableDatabase();
-        query = db.rawQuery("SELECT * FROM card WHERE chapter = ? AND corect_answer<3 ORDER by random() ", new String[]{intent.getStringExtra("CHUPTER")});
+        db = helper.getReadableDatabase();
 
-        query.moveToFirst();
         updateCard();
 
     }
 
     private void updateCard() {
-        btnA.setEnabled(true);
-        btnB.setEnabled(true);
-        btnC.setEnabled(true);
-        btnD.setEnabled(true);
-        learn.setEnabled(true);
-        btnA.setBackgroundResource(android.R.drawable.btn_default);
-        btnB.setBackgroundResource(android.R.drawable.btn_default);
-        btnC.setBackgroundResource(android.R.drawable.btn_default);
-        btnD.setBackgroundResource(android.R.drawable.btn_default);
-
-        btnA.setText(query.getString(3));
-        btnB.setText(query.getString(4));
-        btnC.setText(query.getString(5));
-        btnD.setText(query.getString(6));
-        front.setText(query.getString(2));
-        back.setText(query.getString(1));
-        switch (query.getInt(8)) {
-            case 0: {
-                complite1.setImageResource(R.drawable.circle);
-                complite2.setImageResource(R.drawable.circle);
-                break;
-            }
-            case 1: {
-                complite1.setImageResource(R.drawable.green_circle);
-                break;
-            }
-            case 2: {
-                complite1.setImageResource(R.drawable.green_circle);
-                complite2.setImageResource(R.drawable.green_circle);
-            }
+        flag = true;
+        boolean doIt = true;
+        if (query == null || query.isBeforeFirst() || query.isAfterLast()) {
+            query = db.rawQuery("SELECT * FROM card WHERE chapter = ? AND corect_answer<3 ORDER by random() ", new String[]{intent.getStringExtra("CHUPTER")});
+            if (query.getCount() != 0) {
+                query.moveToFirst();
+            } else doIt = !doIt;
         }
-        if (query.getInt(9) == 1) {
-            fail1.setImageResource(R.drawable.red_circle);
-        } else fail1.setImageResource(R.drawable.circle);
+        if (doIt) {
+
+            btnA.setEnabled(true);
+            btnB.setEnabled(true);
+            btnC.setEnabled(true);
+            btnD.setEnabled(true);
+
+            btnA.setBackgroundResource(android.R.drawable.btn_default);
+            btnB.setBackgroundResource(android.R.drawable.btn_default);
+            btnC.setBackgroundResource(android.R.drawable.btn_default);
+            btnD.setBackgroundResource(android.R.drawable.btn_default);
+            learn.setText(R.string.learn);
+
+            btnA.setText(query.getString(3));
+            btnB.setText(query.getString(4));
+            btnC.setText(query.getString(5));
+            btnD.setText(query.getString(6));
+            front.setText(query.getString(2));
+            back.setText(query.getString(1));
+
+            switch (query.getInt(8)) {
+                case 0: {
+                    complite1.setImageResource(R.drawable.circle);
+                    complite2.setImageResource(R.drawable.circle);
+                    complite3.setImageResource(R.drawable.circle);
+                    break;
+                }
+                case 1: {
+                    complite1.setImageResource(R.drawable.green_circle);
+                    complite2.setImageResource(R.drawable.circle);
+                    complite3.setImageResource(R.drawable.circle);
+                    break;
+                }
+                case 2: {
+                    complite1.setImageResource(R.drawable.green_circle);
+                    complite2.setImageResource(R.drawable.green_circle);
+                    complite3.setImageResource(R.drawable.circle);
+                }
+            }
+            if (query.getInt(9) == 1) {
+                fail1.setImageResource(R.drawable.red_circle);
+            } else {
+                fail1.setImageResource(R.drawable.circle);
+                fail2.setImageResource(R.drawable.circle);
+            }
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(Card.this);
+            builder.setTitle("Congratulations!")
+                    .setMessage("Congratulations!")
+                    .setCancelable(false)
+                    .setNegativeButton("ОК",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                    finish();
+                                }
+                            }).setPositiveButton("Повторити", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    SQLiteDatabase database = helper.getWritableDatabase();
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("wrong_answer", 0);
+                    contentValues.put("corect_answer", 0);
+                    database.update("card", contentValues, "chapter = ?", new String[]{intent.getStringExtra("CHUPTER")});
+                    updateCard();
+                    dialogInterface.cancel();
+                }
+            })
+            ;
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 
     View.OnClickListener onClick = new View.OnClickListener() {
@@ -114,32 +159,52 @@ public class Card extends AppCompatActivity {
                     Log.e("BtnClecked", "A");
                     card.flipTheView();
                     checkAnswer(view.getId());
+                    learn.setText(R.string.next);
+                    flag = false;
                     break;
                 }
                 case R.id.B: {
                     Log.e("BtnClecked", "B");
                     card.flipTheView();
                     checkAnswer(view.getId());
+                    learn.setText(R.string.next);
+                    flag = false;
                     break;
                 }
                 case R.id.C: {
                     Log.e("BtnClecked", "C");
                     card.flipTheView();
                     checkAnswer(view.getId());
+                    learn.setText(R.string.next);
+                    flag = false;
                     break;
                 }
                 case R.id.D: {
                     Log.e("BtnClecked", "D");
                     card.flipTheView();
                     checkAnswer(view.getId());
+                    learn.setText(R.string.next);
+                    flag = false;
                     break;
                 }
                 case R.id.learn_btn: {
                     card.flipTheView();
-
+                    if (flag) {
+                        learn.setText(R.string.next);
+                        btnA.setEnabled(false);
+                        btnB.setEnabled(false);
+                        btnC.setEnabled(false);
+                        btnD.setEnabled(false);
+                        flag = false;
+                    } else {
+                        query.moveToNext();
+                        updateCard();
+                        Log.e("FLAG=FALSE", "updatecard();");
+                    }
                     break;
                 }
             }
+
         }
 
         private void checkAnswer(int id) {
@@ -274,14 +339,10 @@ public class Card extends AppCompatActivity {
                     break;
                 }
             }
-
             btnA.setEnabled(false);
             btnB.setEnabled(false);
             btnC.setEnabled(false);
             btnD.setEnabled(false);
-            learn.setEnabled(false);
-            nextCard();
-
         }
     };
 
@@ -300,41 +361,10 @@ public class Card extends AppCompatActivity {
             contentValues.put("corect_answer", result + 1);
         }
         db.update("card", contentValues, "_id=?", new String[]{query.getInt(0) + ""});
-        db.close();
         SQLiteDatabase database = helper.getReadableDatabase();
         Cursor cursor = database.rawQuery("SELECT corect_answer, wrong_answer FROM card WHERE _id = ?", new String[]{query.getInt(0) + ""});
         cursor.moveToFirst();
         Log.e("corect_answer", cursor.getInt(0) + "");
         Log.e("wrong_answer", cursor.getInt(1) + "");
     }
-
-    private void nextCard() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                timer();
-                query.moveToNext();
-
-            }
-        });
-        thread.start();
-
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        card.flipTheView();
-        updateCard();
-    }
-
-    private void timer() {
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
-

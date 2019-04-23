@@ -35,12 +35,8 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener, Se
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.algebra_chapters_fragment, container, false);
-        try {
-            fillChapters();
-            Log.e("OnCreateView", "OnCreateView");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        fillChapters();
+        Log.e("OnCreateView", "OnCreateView");
 
         recyclerView = view.findViewById(R.id.algebra_list);
         adapter = new Adapter(chapters, this);
@@ -56,7 +52,7 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener, Se
         id = getArguments().getInt("ID");
     }
 
-    private void fillChapters() throws IOException {
+    private void fillChapters() {
         Intent intent = getActivity().getIntent();
         helper = new DBHelper(getContext());
         from = intent.getExtras().getInt(ChoiseAction.INTENT_KEY);
