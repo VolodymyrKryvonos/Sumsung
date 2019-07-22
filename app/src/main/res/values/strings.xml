@@ -11,4 +11,8 @@
     <string name="full_project_name">Math for Graduates</string>
     <string name="learn">Вивчити</string>
     <string name="next">Далі</string>
+    <string name="show">Показати відповідь</string>
+    <string name="chat">Чат</string>
+    <string name="result">Мої результати</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>

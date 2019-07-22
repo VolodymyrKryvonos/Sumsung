@@ -5,22 +5,32 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#00555555"
+    android:background="@drawable/shadow"
 
     >
 
+    <!--<View-->
+        <!--android:id="@+id/divider"-->
+        <!---->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="2dp"-->
+        <!--android:background="@color/ToolBar" />-->
+
     <Button
+        android:textAlignment="viewStart"
+        android:id="@+id/list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/list_item"
-        android:background="@drawable/buttonshape"
-        android:textColor="#000000"
-        android:textSize="23dp"
+
+        android:elevation="2dp"
+        android:padding="2dp"
+        android:layout_marginTop="1dp"
+
+
+        android:background="#fff"
         android:textAllCaps="false"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        />
+        android:textColor="#000000"
+        android:textSize="23dp" />
 
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.vova.matesha;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 public class ChoseChapter extends AppCompatActivity {
     
@@ -40,6 +42,7 @@ public class ChoseChapter extends AppCompatActivity {
         });
     TabLayout tabLayout = findViewById(R.id.sliding_tabs);
     tabLayout.setupWithViewPager(pager);
+        tabLayout.setTabTextColors(Color.BLACK,Color.WHITE);
     }
 
 public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {

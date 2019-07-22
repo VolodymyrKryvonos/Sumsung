@@ -1,6 +1,8 @@
 package com.example.vova.matesha;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,13 +34,12 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener, Se
     ArrayList<Chapter> chapters = new ArrayList<>();
     SQLiteDatabase db;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.algebra_chapters_fragment, container, false);
         fillChapters();
-        Log.e("OnCreateView", "OnCreateView");
-
         recyclerView = view.findViewById(R.id.algebra_list);
         adapter = new Adapter(chapters, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -50,29 +52,44 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener, Se
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         id = getArguments().getInt("ID");
-    }
-
-    private void fillChapters() {
         Intent intent = getActivity().getIntent();
         helper = new DBHelper(getContext());
         from = intent.getExtras().getInt(ChoiseAction.INTENT_KEY);
+        final SharedPreferences preferences  = getActivity().getSharedPreferences(ZnoHolder.ANSWERS,MODE_PRIVATE);
         db = helper.getReadableDatabase();
+        if(from==2&&preferences.getBoolean("unfinished test",false)){
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Незавершений тест")
+                    .setMessage("У вас є незавершений тест, ви можете продовжити його, або видалити.")
+                    .setPositiveButton("Продовжити", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            Intent intent = new Intent(getActivity(), ZnoHolder.class);
+                            intent.putExtra("ID",preferences.getInt("ID_ZNO",0));
+                            startActivity(intent);
+                            dialog.dismiss();
+                        }
+                    }).setNegativeButton("Видалити", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.clear();
+                    editor.apply();
+                    dialog.dismiss();
+                }
+            }).show();
+
+        }
+    }
+
+    private void fillChapters() {
+
         Cursor query;
         switch (from) {
             case 1: {
-                query = db.rawQuery("SELECT chapter, _id FROM chapters WHERE subject=? ;", new String[]{id + ""});
+                query = db.rawQuery("SELECT chapter, _id FROM chapters WHERE subject=?", new String[]{id + ""});
                 break;
             }
             case 2: {
-                query = db.rawQuery("SELECT chapter, _id FROM chapterForCard", new String[]{});
-                break;
-            }
-            case 3: {
-                query = db.rawQuery("SELECT chapter, _id FROM task_chapters WHERE subject=? ;", new String[]{id + ""});
-                break;
-            }
-            case 4: {
-                query = db.rawQuery("SELECT chapter, _id FROM task_chapters WHERE subject=? ;", new String[]{id + ""});
+                query = db.rawQuery("SELECT chapter, _id FROM ZNO", null);
                 break;
             }
             default:
@@ -96,27 +113,23 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener, Se
         if (from == 1) {
             intent = new Intent(getActivity(), HolderActivity.class);
             intent.putExtra("ID", id);
-        } else if (from == 3) {
-            intent = new Intent(getActivity(), TaskActivity.class);
-            intent.putExtra("SUBJECT", this.id);
-            Cursor cursor = db.rawQuery("SELECT chapter FROM task_chapters WHERE _id=? ;", new String[]{id + ""});
-            cursor.moveToFirst();
-            intent.putExtra("CHUPTER", cursor.getString(0));
-        }
-            else if(from==2){
-            intent = new Intent(getActivity(), Card.class);
-            Cursor cursor = db.rawQuery("SELECT chapter FROM chapterForCard WHERE _id=? ;", new String[]{id + ""});
-            cursor.moveToFirst();
-            intent.putExtra("CHUPTER",cursor.getString(0));
+            startActivity(intent);
         }
         else {
             intent = new Intent(getActivity(), ZnoHolder.class);
-            intent.putExtra("FRAGMENT", 2);
             intent.putExtra("ID",id);
+            startActivityForResult(intent,0);
         }
-        startActivity(intent);
+
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data.getExtras().getBoolean("finish")){
+            getActivity().finish();
+        }
+    }
 
     static Chapters newInstance(int id) {
         Chapters pageFragment = new Chapters();

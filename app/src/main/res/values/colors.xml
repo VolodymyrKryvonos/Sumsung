@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#008577</color>
-    <color name="green">#6BBB13</color>
+    <color name="green">#C4FF88</color>
     <color name="red">#DF1010</color>
     <color name="colorPrimaryDark">#0023F5</color>
     <color name="colorAccent">#D81B60</color>
     <color name="ToolBar">#3E48E7</color>
+    <color name="FAB">#7A81FC</color>
 </resources>

@@ -9,11 +9,10 @@
         android:icon="@drawable/logo1"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ZnoCard"></activity>
+        <activity android:name=".ZnoCard" />
         <activity android:name=".ZnoHolder" />
-        <activity android:name=".Card" />
-        <activity android:name=".TaskActivity" />
         <activity android:name=".ChoiseAction">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

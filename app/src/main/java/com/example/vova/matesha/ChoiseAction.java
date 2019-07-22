@@ -17,13 +17,12 @@ import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
 public class ChoiseAction extends AppCompatActivity {
     Intent intent;
-    Button learnBtn, theoriBtn, testsBtn, znoBtn;
+    Button  theoriBtn, znoBtn;
     DBHelper helper;
     EasyFlipView card;
     Toolbar toolbar;
     MathView front, back;
     public final static String INTENT_KEY = "FROM BTN";
-    public final static String SUB_KEY = "ALG/GEOM";
     boolean side = false;
 
     @Override
@@ -44,9 +43,7 @@ public class ChoiseAction extends AppCompatActivity {
 
         front = findViewById(R.id.front_side);
         back = findViewById(R.id.back_side);
-        learnBtn = findViewById(R.id.learn);
         theoriBtn = findViewById(R.id.theori);
-        testsBtn = findViewById(R.id.tests);
         znoBtn = findViewById(R.id.ZNO);
 
         card = findViewById(R.id.flip_card);
@@ -96,26 +93,16 @@ public class ChoiseAction extends AppCompatActivity {
                         intent = new Intent(ChoiseAction.this, ChoseChapter.class);
                         intent.putExtra(INTENT_KEY, 1);
                         break;
-                    case R.id.learn:
-                        intent = new Intent(ChoiseAction.this, ZnoCard.class);
-                        intent.putExtra(INTENT_KEY, 2);
-                        break;
-                    case R.id.tests:
-                        intent = new Intent(ChoiseAction.this, ChoseChapter.class);
-                        intent.putExtra(INTENT_KEY, 3);
-                        break;
                     case R.id.ZNO:
                         intent = new Intent(ChoiseAction.this, ZnoCard.class);
-                        intent.putExtra(INTENT_KEY, 4);
+                        intent.putExtra(INTENT_KEY, 2);
                         break;
                 }
                 startActivity(intent);
             }
         };
         znoBtn.setOnClickListener(onClick);
-        learnBtn.setOnClickListener(onClick);
         theoriBtn.setOnClickListener(onClick);
-        testsBtn.setOnClickListener(onClick);
 
     }
 }

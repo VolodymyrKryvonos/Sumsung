@@ -69,7 +69,6 @@ public class TheoryFragment extends Fragment {
             int resourceId =getResources().getIdentifier(cursor.getString(1) , "drawable", getContext().getPackageName());
 
             Log.e("LOOOOOOOOOOG",resourceId+"");
-            Log.e("CORECT",R.drawable.square1+"");
             Uri uri = Uri.parse("android.resource://"  + getContext().getPackageName() + "/" + resourceId);
             Glide.with(imageView.getContext())
                     .load(uri)
