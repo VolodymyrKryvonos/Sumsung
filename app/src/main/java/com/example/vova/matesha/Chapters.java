@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,18 +12,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class Chapters extends Fragment implements Adapter.onBtnClickListener, Serializable{
+public class Chapters extends Fragment implements ChapterAdapter.onBtnClickListener, Serializable {
 
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
@@ -41,7 +38,7 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener, Se
         View view = inflater.inflate(R.layout.algebra_chapters_fragment, container, false);
         fillChapters();
         recyclerView = view.findViewById(R.id.algebra_list);
-        adapter = new Adapter(chapters, this);
+        adapter = new ChapterAdapter(chapters, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
@@ -116,6 +113,10 @@ public class Chapters extends Fragment implements Adapter.onBtnClickListener, Se
             startActivity(intent);
         }
         else {
+            SharedPreferences preferences = getActivity().getSharedPreferences(ZnoHolder.ANSWERS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.commit();
             intent = new Intent(getActivity(), ZnoHolder.class);
             intent.putExtra("ID",id);
             startActivityForResult(intent,0);

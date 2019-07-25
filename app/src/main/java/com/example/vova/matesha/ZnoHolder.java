@@ -1,6 +1,5 @@
 package com.example.vova.matesha;
 
-import android.app.DownloadManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +8,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -18,13 +18,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 public class ZnoHolder extends AppCompatActivity {
-boolean finished = false;
+    boolean finished = false;
     ViewPager tasks;
     FragmentManager fragmentManager;
     DBHelper helper;
@@ -38,19 +37,8 @@ boolean finished = false;
     SQLiteDatabase database;
 
     @Override
-    protected void onDestroy() {
-        Log.e("onDestroy","onDestroy");
-        if (!answers.getBoolean("unfinished test",false)){
-            Log.e("onDestroy","onDestroy");
-            SharedPreferences.Editor editor = answers.edit();
-            editor.clear().commit();
-        }
-        super.onDestroy();
-    }
-
-    @Override
     public void onBackPressed() {
-        if(!finished) {
+        if (!finished) {
             new AlertDialog.Builder(ZnoHolder.this)
                     .setTitle("Вийти з тесту")
                     .setMessage("Зберегти відповіді?")
@@ -74,8 +62,8 @@ boolean finished = false;
                     dialog.dismiss();
                 }
             }).show();
-        }
-        else {setResult(RESULT_OK, new Intent().putExtra("finish", false));
+        } else {
+            setResult(RESULT_OK, new Intent().putExtra("finish", false));
             SharedPreferences.Editor editor = answers.edit();
             editor.clear();
             editor.apply();
@@ -105,21 +93,40 @@ boolean finished = false;
                         .setCancelable(false)
                         .setNegativeButton("Завершити",
                                 new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
+                                    public void onClick(DialogInterface dialog, int idd) {
+
+
+                                        Log.e("Fab", "Clicked");
+                                        float score = checkAnswers();
+                                        SQLiteDatabase base = helper.getWritableDatabase();
+                                        ContentValues contentValues = new ContentValues();
+                                        android.text.format.DateFormat df = new android.text.format.DateFormat();
+                                        contentValues.put("date", (String) DateFormat.format("yy.MM.dd hh:mm", new java.util.Date()));
+                                        contentValues.put("score", score);
+                                        contentValues.put("result", score);
+                                        Cursor cursor = database.rawQuery("SELECT chapter FROM ZNO WHERE _id=?", new String[]{id + ""});
+                                        cursor.moveToFirst();
+                                        contentValues.put("name", cursor.getString(0));
+                                        base.insert("results", null, contentValues);
+
+
+
+
+
                                         AlertDialog.Builder builder2 = new AlertDialog.Builder(ZnoHolder.this);
                                         builder2.setTitle("Тест завершено")
-                                                .setMessage("Ваш бал складає " + checkAnswers())
+                                                .setMessage("Ваш бал складає " + score)
                                                 .setCancelable(false)
                                                 .setPositiveButton("Подивитись",
                                                         new DialogInterface.OnClickListener() {
                                                             public void onClick(DialogInterface dialog, int id) {
-                                                                tasks.setCurrentItem(0);
                                                                 SharedPreferences.Editor editor = answers.edit();
-                                                                editor.putBoolean("finished",true);
+                                                                editor.putBoolean("finished", true);
                                                                 editor.commit();
                                                                 finished = true;
                                                                 fab.setVisibility(View.GONE);
                                                                 dialog.cancel();
+                                                                tasks.setCurrentItem(0);
                                                             }
                                                         })
                                                 .setNegativeButton("Вийти", new DialogInterface.OnClickListener() {
@@ -211,21 +218,14 @@ boolean finished = false;
 
         do {
 
-
-            Log.e("1 ANSWER: ",Float.parseFloat(answers.getString(cursor.getInt(0) + "_1", "0.99"))+"");
-            Log.e("right 1 ANSWER: ",cursor.getFloat(1)+"");
-
-            Log.e("COMPARE " ,(Float.parseFloat(answers.getString(cursor.getInt(0) + "_1", "0.99"))== cursor.getFloat(1))+"");
-
             if (cursor.getInt(3) == 1) {
-                if (Float.parseFloat(answers.getString(cursor.getInt(0) + "_1", "0.99"))== cursor.getFloat(1)) {
+                if (Float.parseFloat(answers.getString(cursor.getInt(0) + "_1", "0.99")) == cursor.getFloat(1)) {
                     scores++;
                 }
-                if (Float.parseFloat(answers.getString(cursor.getInt(0) + "_2", "0.99"))== cursor.getFloat(2)) {
+                if (Float.parseFloat(answers.getString(cursor.getInt(0) + "_2", "0.99")) == cursor.getFloat(2)) {
                     scores++;
                 }
-            }
-            else if (Float.parseFloat(answers.getString(cursor.getInt(0) + "_1", "0.99"))== cursor.getFloat(1)) {
+            } else if (Float.parseFloat(answers.getString(cursor.getInt(0) + "_1", "0.99")) == cursor.getFloat(1)) {
                 scores += 2;
             }
         } while (cursor.moveToNext());

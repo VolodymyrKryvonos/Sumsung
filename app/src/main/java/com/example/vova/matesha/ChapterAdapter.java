@@ -1,8 +1,6 @@
 package com.example.vova.matesha;
 
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +9,13 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
+public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHolder> {
 
 
     ArrayList<Chapter> mChapters;
     onBtnClickListener listener;
-    public Adapter(ArrayList<Chapter> s, onBtnClickListener listener) {
+
+    public ChapterAdapter(ArrayList<Chapter> s, onBtnClickListener listener) {
         mChapters = s;
         this.listener = listener;
     }

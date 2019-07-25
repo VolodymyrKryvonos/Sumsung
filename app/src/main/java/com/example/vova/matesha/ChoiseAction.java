@@ -3,21 +3,22 @@ package com.example.vova.matesha;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.wajahatkarim3.easyflipview.EasyFlipView;
+
 import io.github.kexanie.library.MathView;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
 public class ChoiseAction extends AppCompatActivity {
     Intent intent;
-    Button  theoriBtn, znoBtn;
+    Button theoriBtn, znoBtn, resultBtn;
     DBHelper helper;
     EasyFlipView card;
     Toolbar toolbar;
@@ -45,6 +46,7 @@ public class ChoiseAction extends AppCompatActivity {
         back = findViewById(R.id.back_side);
         theoriBtn = findViewById(R.id.theori);
         znoBtn = findViewById(R.id.ZNO);
+        resultBtn = findViewById(R.id.result);
 
         card = findViewById(R.id.flip_card);
 
@@ -103,6 +105,13 @@ public class ChoiseAction extends AppCompatActivity {
         };
         znoBtn.setOnClickListener(onClick);
         theoriBtn.setOnClickListener(onClick);
+        resultBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ChoiseAction.this, ResultActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 }
