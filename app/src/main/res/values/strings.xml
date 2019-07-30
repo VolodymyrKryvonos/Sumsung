@@ -15,4 +15,6 @@
     <string name="chat">Чат</string>
     <string name="result">Мої результати</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="right">Правильна відповідь: </string>
+    <string name="your">Ваша відповідь: </string>
 </resources>

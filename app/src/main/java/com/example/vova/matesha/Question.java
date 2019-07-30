@@ -4,12 +4,10 @@ package com.example.vova.matesha;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,7 +31,7 @@ import com.bumptech.glide.Glide;
 
 
 public class Question extends Fragment {
-    TextView seekBarReflector;
+    TextView seekBarReflector, type2Right, type2Your, type3Right, type3Your;
     SeekBar type4Answer;
     int number, divided;
     Intent intent;
@@ -42,8 +40,8 @@ public class Question extends Fragment {
     SQLiteDatabase database;
     int type, id;
     RadioButton type1A, type1B, type1V, type1G, type1D;
-    RadioGroup type2Answers1, type2Answers2, type2Answers3, type2Answers4;
-    RelativeLayout type1, type2, type3, type4;
+    RadioGroup type2Answers1, type2Answers2, type2Answers3, type2Answers4, type1answers;
+    RelativeLayout type1, type2, type3, type4, right2, right3, subType2, sub_type3;
     SharedPreferences answers;
     TextView hint;
     EditText type3Answer1, type3Answer2;
@@ -57,32 +55,32 @@ public class Question extends Fragment {
             switch (view.getId()) {
                 case R.id.type1_a: {
 
-                    editor.putString(number + "", "A");
+                    editor.putString(number + "", "А");
 
 
                 }
                 break;
                 case R.id.type1_b: {
 
-                    editor.putString(number + "", "B");
+                    editor.putString(number + "", "Б");
 
                 }
                 break;
                 case R.id.type1_v: {
 
-                    editor.putString(number + "", "V");
+                    editor.putString(number + "", "В");
 
                 }
                 break;
                 case R.id.type1_g: {
 
-                    editor.putString(number + "", "G");
+                    editor.putString(number + "", "Г");
 
                 }
                 break;
                 case R.id.type1_d: {
 
-                    editor.putString(number + "", "D");
+                    editor.putString(number + "", "Д");
 
                 }
                 break;
@@ -102,23 +100,23 @@ public class Question extends Fragment {
                     String answer = null;
                     switch (i) {
                         case R.id.A_1: {
-                            answer = "A";
+                            answer = "А";
                         }
                         break;
                         case R.id.B_1: {
-                            answer = "B";
+                            answer = "Б";
                         }
                         break;
                         case R.id.V_1: {
-                            answer = "V";
+                            answer = "В";
                         }
                         break;
                         case R.id.G_1: {
-                            answer = "G";
+                            answer = "Г";
                         }
                         break;
                         case R.id.D_1: {
-                            answer = "D";
+                            answer = "Д";
                         }
                         break;
                     }
@@ -129,23 +127,23 @@ public class Question extends Fragment {
                     String answer = null;
                     switch (i) {
                         case R.id.A_2: {
-                            answer = "A";
+                            answer = "А";
                         }
                         break;
                         case R.id.B_2: {
-                            answer = "B";
+                            answer = "Б";
                         }
                         break;
                         case R.id.V_2: {
-                            answer = "V";
+                            answer = "В";
                         }
                         break;
                         case R.id.G_2: {
-                            answer = "G";
+                            answer = "Г";
                         }
                         break;
                         case R.id.D_2: {
-                            answer = "D";
+                            answer = "Д";
                         }
                         break;
                     }
@@ -156,23 +154,23 @@ public class Question extends Fragment {
                     String answer = null;
                     switch (i) {
                         case R.id.A_3: {
-                            answer = "A";
+                            answer = "А";
                         }
                         break;
                         case R.id.B_3: {
-                            answer = "B";
+                            answer = "Б";
                         }
                         break;
                         case R.id.V_3: {
-                            answer = "V";
+                            answer = "В";
                         }
                         break;
                         case R.id.G_3: {
-                            answer = "G";
+                            answer = "Г";
                         }
                         break;
                         case R.id.D_3: {
-                            answer = "D";
+                            answer = "Д";
                         }
                         break;
                     }
@@ -183,23 +181,23 @@ public class Question extends Fragment {
                     String answer = null;
                     switch (i) {
                         case R.id.A_4: {
-                            answer = "A";
+                            answer = "А";
                         }
                         break;
                         case R.id.B_4: {
-                            answer = "B";
+                            answer = "Б";
                         }
                         break;
                         case R.id.V_4: {
-                            answer = "V";
+                            answer = "В";
                         }
                         break;
                         case R.id.G_4: {
-                            answer = "G";
+                            answer = "Г";
                         }
                         break;
                         case R.id.D_4: {
-                            answer = "D";
+                            answer = "Д";
                         }
                         break;
                     }
@@ -216,19 +214,27 @@ public class Question extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.question_fragment, container, false);
-        Log.e("onCreateView", "onCreateView "+number);
+        Log.e("onCreateView", "onCreateView " + number);
         type1 = v.findViewById(R.id.answers);
         type2 = v.findViewById(R.id.type2);
         type3 = v.findViewById(R.id.type3);
         type4 = v.findViewById(R.id.type4);
         type3_2 = v.findViewById(R.id.type3_2);
         hint = v.findViewById(R.id.hint1);
-
+        right2 = v.findViewById(R.id.right2);
+        right3 = v.findViewById(R.id.right3);
+        type2Right = v.findViewById(R.id.type2_right_answer);
+        type2Your = v.findViewById(R.id.type2_your_answer);
+        type3Right = v.findViewById(R.id.type3_right_answer);
+        type3Your = v.findViewById(R.id.type3_your_answer);
+        subType2 = v.findViewById(R.id.your_answer);
+        sub_type3 = v.findViewById(R.id.sub_type3);
 
         type = determineType();
 
 
         if (type == 1) {
+            type1answers = v.findViewById(R.id.type1_answers);
             type1A = v.findViewById(R.id.type1_a);
             type1B = v.findViewById(R.id.type1_b);
             type1V = v.findViewById(R.id.type1_v);
@@ -354,15 +360,15 @@ public class Question extends Fragment {
 
     @Override
     public void onPause() {
-        Log.e("onPause", "onPause "+number);
+        Log.e("onPause", "onPause " + number);
         super.onPause();
     }
 
     @Override
     public void onResume() {
 //        Log.e("onResume", answers.getBoolean("finished",false)+"");
-        if(answers.getBoolean("finished",false)){
-            Log.e("onResume", "onResume "+number);
+        if (answers.getBoolean("finished", false)) {
+            Log.e("onResume", "onResume " + number);
             setRightAnswers();
         }
         super.onResume();
@@ -587,29 +593,55 @@ public class Question extends Fragment {
 
     private void setRightAnswers() {
         if (type == 1) {
-            answer = database.rawQuery("SELECT answers FROM first_level WHERE _id=? and number = ?", new String[]{id + "",number+""});
+            answer = database.rawQuery("SELECT answers FROM first_level WHERE _id=? and number = ?", new String[]{id + "", number + ""});
             answer.moveToFirst();
+            switch (type1answers.getCheckedRadioButtonId()) {
+                case R.id.type1_a: {
+                    type1A.setTextColor(Color.RED);
+                    break;
+                }
+                case R.id.type1_b: {
+                    type1B.setTextColor(Color.RED);
+                    break;
+                }
+                case R.id.type1_v: {
+                    type1V.setTextColor(Color.RED);
+                    break;
+                }
+                case R.id.type1_g: {
+                    type1G.setTextColor(Color.RED);
+                    break;
+                }
+                case R.id.type1_d: {
+                    type1D.setTextColor(Color.RED);
+                    break;
+                }
+
+            }
+
+
             switch (answer.getString(0)) {
-                case "A": {
+                case "А": {
                     type1A.setChecked(true);
-                    type1A.setTextColor(Color.GREEN);}
+                    type1A.setTextColor(Color.GREEN);
+                }
                 break;
-                case "B": {
+                case "Б": {
                     type1B.setChecked(true);
                     type1B.setTextColor(Color.GREEN);
                 }
                 break;
-                case "V": {
+                case "В": {
                     type1V.setChecked(true);
                     type1V.setTextColor(Color.GREEN);
                 }
                 break;
-                case "G": {
+                case "Г": {
                     type1G.setChecked(true);
                     type1G.setTextColor(Color.GREEN);
                 }
                 break;
-                case "D": {
+                case "Д": {
                     type1D.setChecked(true);
                     type1D.setTextColor(Color.GREEN);
                 }
@@ -621,7 +653,28 @@ public class Question extends Fragment {
             type1G.setClickable(false);
             type1D.setClickable(false);
 
+        } else if (type == 2) {
+            answer = database.rawQuery("SELECT right_answer_1, right_answer_2, right_answer_3, right_answer_4 FROM second_level WHERE _id=? and number = ?", new String[]{id + "", number + ""});
+            answer.moveToFirst();
+            subType2.setVisibility(View.GONE);
+            right2.setVisibility(View.VISIBLE);
+            type2Your.setText(getString(R.string.your) + answers.getString(number + "_1", "") + answers.getString(number + "_2", "") + answers.getString(number + "_3", "") + answers.getString(number + "_4", ""));
+            type2Right.setText(getString(R.string.right) + answer.getString(0) + answer.getString(1) + answer.getString(2) + answer.getString(3));
+
+        } else if (type == 3) {
+            answer = database.rawQuery("SELECT answer1,answer2,divided FROM third_level WHERE _id=? and number = ?", new String[]{id + "", number + ""});
+            answer.moveToFirst();
+            sub_type3.setVisibility(View.GONE);
+            right3.setVisibility(View.VISIBLE);
+            if (divided == 1) {
+                type3Your.setText(getString(R.string.your) + "  1)" + answers.getString(number + "_1", " ") + "   2)" + answers.getString(number + "_2", " "));
+                type3Right.setText(getString(R.string.right) + "  1)" + answer.getString(0) + "   2)" + answer.getString(1));
+            } else {
+                type3Your.setText(getString(R.string.your) + "  " + answers.getString(number + "_1", " "));
+                type3Right.setText(getString(R.string.right) + "  " + answer.getString(0));
+            }
         }
+
     }
 
 
