@@ -17,4 +17,5 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="right">Правильна відповідь: </string>
     <string name="your">Ваша відповідь: </string>
+    <string name="bad_mood">В Польщу на клубніку</string>
 </resources>

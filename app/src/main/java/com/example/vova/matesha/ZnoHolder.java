@@ -94,17 +94,20 @@ public class ZnoHolder extends AppCompatActivity {
                         .setNegativeButton("Завершити",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int idd) {
-
-
+                                        int score = checkAnswers(), result;
+                                        Cursor cursor = database.rawQuery("SELECT ZnoScore From testScoreToZno Where _id=? and TestScore = ?", new String[]{id + "", score + ""});
+                                        cursor.moveToFirst();
                                         Log.e("Fab", "Clicked");
-                                        float score = checkAnswers();
                                         SQLiteDatabase base = helper.getWritableDatabase();
                                         ContentValues contentValues = new ContentValues();
                                         android.text.format.DateFormat df = new android.text.format.DateFormat();
                                         contentValues.put("date", (String) DateFormat.format("yy.MM.dd hh:mm", new java.util.Date()));
-                                        contentValues.put("score", score);
                                         contentValues.put("result", score);
-                                        Cursor cursor = database.rawQuery("SELECT chapter FROM ZNO WHERE _id=?", new String[]{id + ""});
+                                        if (cursor.getCount() != 0) {
+                                            result = cursor.getInt(0);
+                                        } else result = 0;
+                                        contentValues.put("score", result);
+                                        cursor = database.rawQuery("SELECT chapter FROM ZNO WHERE _id=?", new String[]{id + ""});
                                         cursor.moveToFirst();
                                         contentValues.put("name", cursor.getString(0));
                                         base.insert("results", null, contentValues);
@@ -115,7 +118,7 @@ public class ZnoHolder extends AppCompatActivity {
 
                                         AlertDialog.Builder builder2 = new AlertDialog.Builder(ZnoHolder.this);
                                         builder2.setTitle("Тест завершено")
-                                                .setMessage("Ваш бал складає " + score)
+                                                .setMessage("Ваш бал складає " + (result == 0 ? " не склав" : result))
                                                 .setCancelable(false)
                                                 .setPositiveButton("Подивитись",
                                                         new DialogInterface.OnClickListener() {
@@ -186,7 +189,7 @@ public class ZnoHolder extends AppCompatActivity {
         tabLayout.setTabTextColors(Color.BLACK, Color.WHITE);
     }
 
-    private float checkAnswers() {
+    private int checkAnswers() {
         int scores = 0;
         Cursor cursor = database.rawQuery("SELECT number, answers FROM first_level WHERE _id=?", new String[]{id + ""});
         cursor.moveToFirst();

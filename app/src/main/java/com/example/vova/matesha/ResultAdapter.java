@@ -20,8 +20,10 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.Holder> {
     DBHelper helper;
     SQLiteDatabase database;
 
-    public ResultAdapter(ArrayList<Result> results) {
+
+    public ResultAdapter(ArrayList<Result> results, Context context) {
         this.results = results;
+        this.context = context;
     }
 
     @Override
@@ -39,14 +41,17 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.Holder> {
         holder.score.setText(holder.score.getText() + (results.get(position).score + ""));
         holder.date.setText(results.get(position).date);
 
-        if (results.get(position).score <= 130) {
+        if (results.get(position).score == 0) {
+            holder.mood.setImageResource(R.drawable.strawberry);
+            holder.textMood.setText(context.getText(R.string.bad_mood));
+        } else if (results.get(position).score <= 170 && results.get(position).score > 130) {
             holder.mood.setImageResource(R.drawable.zno);
-        } else if (results.get(position).score <= 160 && results.get(position).score > 130) {
+        } else if (results.get(position).score > 170 && results.get(position).score <= 185) {
             holder.mood.setImageResource(R.drawable.zno);
-        } else if (results.get(position).score > 160 && results.get(position).score <= 185) {
+        } else if (results.get(position).score > 185 && results.get(position).score != 200) {
             holder.mood.setImageResource(R.drawable.zno);
-        } else if (results.get(position).score > 185) {
-            holder.mood.setImageResource(R.drawable.zno);
+        } else {
+
         }
     }
 
@@ -69,13 +74,13 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.Holder> {
 
     public class Holder extends RecyclerView.ViewHolder {
 
-        TextView result, score, date, name;
+        TextView result, score, date, name, textMood;
         ImageView mood;
 
         public Holder(View itemView) {
 
             super(itemView);
-
+            textMood = itemView.findViewById(R.id.text_mood);
             result = itemView.findViewById(R.id.correct);
             score = itemView.findViewById(R.id.score);
             date = itemView.findViewById(R.id.date);

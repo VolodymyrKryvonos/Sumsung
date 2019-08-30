@@ -26,7 +26,7 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
         fillResults();
         recyclerView = findViewById(R.id.results);
-        adapter = new ResultAdapter(results);
+        adapter = new ResultAdapter(results, ResultActivity.this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
